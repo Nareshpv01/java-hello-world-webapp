@@ -1,33 +1,12 @@
-pipeline {
-    agent any
+node{
 
- //  tools {
-   //     // Install the Maven version configured as "M3" and add it to the path.
-    //    maven "M3"
-    //}
+  git branch: "master", url: "https://github.com/jglick/simple-maven-project-with-tests.git" credentialsId: "git" 
 
-    stages {
-        stage('Build') {
-            steps {
-                // Get some code from a GitHub repository
-                git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-		branch 'master'
-		credentialsId 'git'
-                // Run Maven on a Unix agent.
-                sh "mvn clean package"
-		sh "docker build -t deploy ."
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
-            }
+  stage ('Build') {
+    sh "mvn clean package"
+  }
 
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
-                }
-            }
-        }
-    }
+  stage ('create docker image') {
+    sh "docker build -t naresh ."
+  }
 }
