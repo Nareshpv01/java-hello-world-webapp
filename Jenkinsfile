@@ -20,5 +20,10 @@ steps{
 sh 'docker build -t deploy .'
 }
 }
+stage('Create container') {
+steps{
+sh 'docker run -it -d -p 8082:8080 deploy '
+}
+}
 }
 }
