@@ -1,13 +1,24 @@
-node{
-
-  git branch: "master", url: "https://github.com/jglick/simple-maven-project-with-tests.git", credentialsId: "git" 
-
-  stage ('Build') {
-    def "/home/ec2-user/maven/apache-maven-3.8.4"
-    sh "mvn clean package"
-  }
-
-  stage ('create docker image') {
-    sh "docker build -t naresh ."
-  }
+pipeline {
+  agent any
+  tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "maven"
+    }
+stages {
+stage('Cloning Git') {
+steps {
+git([url: 'https://github.com/Nareshpv01/java-hello-world-webapp.git', branch: 'master', credentialsId: 'git'])
+}
+}
+stage('Building image') {
+steps{
+sh 'mvn clean packege'
+}
+}
+stage('Create Image') {
+steps{
+sh 'docker build -t deploy .'
+}
+}
+}
 }
