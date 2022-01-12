@@ -11,7 +11,8 @@ pipeline {
             steps {
                 // Get some code from a GitHub repository
                 git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-		branch: 'master', credentialsId: 'git'
+		branch 'master'
+		credentialsId 'git'
                 // Run Maven on a Unix agent.
                 sh "mvn clean package"
 		sh "docker build -t deploy ."
