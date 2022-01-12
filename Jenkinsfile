@@ -12,7 +12,7 @@ git([url: 'https://github.com/Nareshpv01/java-hello-world-webapp.git', branch: '
 }
 stage('Building image') {
 steps{
-sh 'mvn clean packege'
+sh 'mvn clean package'
 }
 }
 stage('Create Image') {
