@@ -41,4 +41,6 @@
   - name: Start jenkins
     become: true
     ansible.builtin.systemd:
+      name: jenkins
+      state: started
                                
