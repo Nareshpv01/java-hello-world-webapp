@@ -40,5 +40,48 @@ resource "aws_instance" "myFirstInstance" {
   key_name = var.key_name
   instance_type = var.instance_type
   security_groups= [ "security_jenkins_port"]
+  tags= {    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+ ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+ # outbound from jenkis server
+  egress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags= {
+    Name = "security_jenkins_port"
+  }
+}
+
+resource "aws_instance" "myFirstInstance" {
+  ami           = "ami-001089eb624938d9f"
+  key_name = var.key_name
+  instance_type = var.instance_type
+  security_groups= [ "security_jenkins_port"]
+  tags= {
+    Name = "jenkins_instance"
+  }
+}
+
+# Create Elastic IP address
+resource "aws_eip" "myFirstInstance" {
+  vpc      = true
+  instance = aws_instance.myFirstInstance.id
+tags= {
+    Name = "jenkins_elstic_ip"
+  }
+}
+
                                      
